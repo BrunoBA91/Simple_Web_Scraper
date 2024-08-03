@@ -88,26 +88,27 @@ def compare_jobPostings_files():
         os.rename('tempJobPostings.txt','currentJobPostings.txt')
         return True
 
-# Email
-subject = "UCS Most Recent Technology Jobs"
-sender = "YOUR_EMAIL_HERE"
-recipients = ["LIST_OF_EMAIL_RECIPIENTS_HERE"]
-password = "YOUR_SECRET_HERE"
-
-# Website
-url = 'https://ww2.nycourts.gov/job-postings-statewide-careers-22971'
-response = urllib.request.urlopen(url)
-webContent = response.read().decode('UTF-8')
-
-# Compare job postings
-jobPostings, paragraphs = html_parser_temp(webContent)
-generate_tempJobPostings_file(jobPostings)
-comparison = compare_jobPostings_files()
-
-# Send email if job postings have been updated
-if (jobPostings == None or paragraphs == None):
-    send_email("ERROR! CHECK CODE!","",recipients, password)
-else:
-    if comparison:
-        body = generate_email_body(jobPostings, paragraphs)
-        send_email(subject, body, sender, recipients, password)
+if __name__=="__main__":
+    # Email
+    subject = "UCS Most Recent Technology Jobs"
+    sender = "YOUR_EMAIL_HERE"
+    recipients = ["LIST_OF_EMAIL_RECIPIENTS_HERE"]
+    password = "YOUR_SECRET_HERE"
+    
+    # Website
+    url = 'https://ww2.nycourts.gov/job-postings-statewide-careers-22971'
+    response = urllib.request.urlopen(url)
+    webContent = response.read().decode('UTF-8')
+    
+    # Compare job postings
+    jobPostings, paragraphs = html_parser_temp(webContent)
+    generate_tempJobPostings_file(jobPostings)
+    comparison = compare_jobPostings_files()
+    
+    # Send email if job postings have been updated
+    if (jobPostings == None or paragraphs == None):
+        send_email("ERROR! CHECK CODE!","",recipients, password)
+    else:
+        if comparison:
+            body = generate_email_body(jobPostings, paragraphs)
+            send_email(subject, body, sender, recipients, password)
